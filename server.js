@@ -8,7 +8,7 @@ app.use(express.json())
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN   // set in Meta dashboard
 const WA_TOKEN    = process.env.WA_TOKEN   // WhatsApp API token
 const PHONE_ID    = process.env.PHONE_ID   // WhatsApp phone number ID
-const SHEET_URL   = process.env.SHEET_URL  // Google Apps Script webhook URL
+
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
