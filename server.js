@@ -117,13 +117,17 @@ async function transcribeAudio(audioUrl) {
 async function getFeedback(imageBase64, textInput) {
   const content = []
 
-  if (imageBase64) {
-    content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 } })
+  if (!imageBase64) {
+    return 'Please always send a photo along with your message or voice note so we can assess the issue properly.'
   }
+
+  content.push({ type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: imageBase64 } })
+
   if (textInput) {
     content.push({ type: 'text', text: textInput })
+  } else {
+    return 'Please include a voice note or text description along with your photo.'
   }
-  if (content.length === 0) return 'No image or audio received.'
 
   const response = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
