@@ -76,7 +76,7 @@ async function handleMessage(from, message, changes) {
   await sendWhatsApp(from, feedback)
 
   // Log to Airtable
-  await logToAirtable({ from, userText: combinedInput, feedback, timestamp: new Date().toISOString() })
+  await logToAirtable({ from, userText: combinedInput, feedback, timestamp: new Date().toISOString(), imageBase64 })
 }
 
 // ─── 4. Download media from Meta ────────────────────────────────────────────
@@ -160,6 +160,15 @@ async function sendWhatsApp(to, message) {
 
 // ─── 8. Log to Airtable ────────────────────────────────────────────────────
 async function logToAirtable(data) {
+  // First upload the image to Airtable if there is one
+  let attachments = []
+  if (data.imageBase64) {
+    attachments = [{ 
+      url: `data:image/jpeg;base64,${data.imageBase64}`,
+      filename: `farm-${Date.now()}.jpg`
+    }]
+  }
+
   await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_NAME}`, {
     method: 'POST',
     headers: {
@@ -171,9 +180,11 @@ async function logToAirtable(data) {
         Timestamp: data.timestamp,
         From: data.from,
         Message: data.userText,
-        Feedback: data.feedback
+        Feedback: data.feedback,
+        Image: attachments
       }
     })
   })
 }
-app.listen(3000, () => console.log('Farm Assistant running on port 3000'))
+
+app.listen(process.env.PORT || 3000, () => console.log('Farm Assistant running on port 3000'))
