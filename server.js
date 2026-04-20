@@ -75,8 +75,8 @@ async function handleMessage(from, message, changes) {
   // Reply on WhatsApp
   await sendWhatsApp(from, feedback)
 
-  // Log to Google Sheets
-  await logToSheets({ from, userText: combinedInput, feedback, timestamp: new Date().toISOString() })
+  // Log to Airtable
+  await logToAirtable({ from, userText: combinedInput, feedback, timestamp: new Date().toISOString() })
 }
 
 // ─── 4. Download media from Meta ────────────────────────────────────────────
