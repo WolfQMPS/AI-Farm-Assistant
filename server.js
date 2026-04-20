@@ -5,7 +5,7 @@ import Anthropic from '@anthropic-ai/sdk'
 const app = express()
 app.use(express.json())
 
-const VERIFY_TOKEN = 'your_verify_token'   // set in Meta dashboard
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN   // set in Meta dashboard
 const WA_TOKEN    = process.env.WA_TOKEN   // WhatsApp API token
 const PHONE_ID    = process.env.PHONE_ID   // WhatsApp phone number ID
 const SHEET_URL   = process.env.SHEET_URL  // Google Apps Script webhook URL
