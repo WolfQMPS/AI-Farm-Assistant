@@ -158,14 +158,22 @@ async function sendWhatsApp(to, message) {
   })
 }
 
-// ─── 8. Log to Google Sheets ────────────────────────────────────────────────
-// (Set up a Google Apps Script on your sheet that accepts POST requests)
-async function logToSheets(data) {
-  await fetch(SHEET_URL, {
+// ─── 8. Log to Airtable ────────────────────────────────────────────────────
+async function logToAirtable(data) {
+  await fetch(`https://api.airtable.com/v0/${process.env.AIRTABLE_BASE_ID}/${process.env.AIRTABLE_TABLE_NAME}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
+    headers: {
+      Authorization: `Bearer ${process.env.AIRTABLE_API_KEY}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      fields: {
+        Timestamp: data.timestamp,
+        From: data.from,
+        Message: data.userText,
+        Feedback: data.feedback
+      }
+    })
   })
 }
-
 app.listen(3000, () => console.log('Farm Assistant running on port 3000'))
