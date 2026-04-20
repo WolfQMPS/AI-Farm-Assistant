@@ -8,6 +8,7 @@ app.use(express.json())
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN   // set in Meta dashboard
 const WA_TOKEN    = process.env.WA_TOKEN   // WhatsApp API token
 const PHONE_ID    = process.env.PHONE_ID   // WhatsApp phone number ID
+const messageBuffer = new Map()
 
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -43,7 +44,7 @@ app.post('/webhook', async (req, res) => {
   }
 })
 
-// ─── 3. Route by message type ───────────────────────────────────────────────
+// ─── 3. Route messages ──────────────────────────────────
 async function handleMessage(from, message, changes) {
   let imageBase64 = null
   let transcribedText = ''
@@ -53,30 +54,63 @@ async function handleMessage(from, message, changes) {
   if (message.type === 'image') {
     const mediaId = message.image.id
     imageBase64   = await downloadMedia(mediaId)
+
+    // Store image and wait 30 seconds for a follow-up voice/text
+    messageBuffer.set(from, { imageBase64, timestamp: Date.now() })
+    await sendWhatsApp(from, 'Photo received! Now send a voice note or text describing the issue.')
+    
+    // Wait 30 seconds then process whatever we have
+    setTimeout(async () => {
+      const buffered = messageBuffer.get(from)
+      if (buffered && buffered.imageBase64) {
+        messageBuffer.delete(from)
+        const feedback = await getFeedback(buffered.imageBase64, buffered.text || '')
+        await sendWhatsApp(from, feedback)
+        await logToAirtable({ 
+          from, 
+          userText: buffered.text || '(no description provided)', 
+          feedback, 
+          timestamp: new Date().toISOString(), 
+          imageBase64: buffered.imageBase64 
+        })
+      }
+    }, 30000)
+    return
   }
 
-  // Extract & transcribe audio
-  if (message.type === 'audio') {
-    const mediaId   = message.audio.id
-    const audioUrl  = await getMediaUrl(mediaId)
-    transcribedText = await transcribeAudio(audioUrl)
+  // If audio or text arrives and there's a buffered image for this person
+  if (message.type === 'audio' || message.type === 'text') {
+    const buffered = messageBuffer.get(from)
+
+    if (message.type === 'audio') {
+      const mediaId = message.audio.id
+      const audioUrl = await getMediaUrl(mediaId)
+      userText = await transcribeAudio(audioUrl)
+    }
+
+    if (message.type === 'text') {
+      userText = message.text.body
+    }
+
+    if (buffered && buffered.imageBase64) {
+      // We have both image + text/audio — process immediately
+      clearTimeout(buffered.timeout)
+      messageBuffer.delete(from)
+      const feedback = await getFeedback(buffered.imageBase64, userText)
+      await sendWhatsApp(from, feedback)
+      await logToAirtable({ 
+        from, 
+        userText, 
+        feedback, 
+        timestamp: new Date().toISOString(), 
+        imageBase64: buffered.imageBase64 
+      })
+    } else {
+      // Text/audio with no image — ask for photo
+      await sendWhatsApp(from, 'Please send a photo of the issue first, then follow up with a voice note or description.')
+    }
+    return
   }
-
-  // Extract text
-  if (message.type === 'text') {
-    userText = message.text.body
-  }
-
-  const combinedInput = [transcribedText, userText].filter(Boolean).join('\n')
-
-  // Get AI feedback
-  const feedback = await getFeedback(imageBase64, combinedInput)
-
-  // Reply on WhatsApp
-  await sendWhatsApp(from, feedback)
-
-  // Log to Airtable
-  await logToAirtable({ from, userText: combinedInput, feedback, timestamp: new Date().toISOString(), imageBase64 })
 }
 
 // ─── 4. Download media from Meta ────────────────────────────────────────────
