@@ -580,7 +580,7 @@ async function fetchFromAirtable() {
   const grid = document.getElementById('cardGrid');
   grid.innerHTML = `<div class="empty-state"><p style="color:var(--text-muted);font-size:14px">Loading cards...</p></div>`;
   try {
-    const url = `https://api.airtable.com/v0/apppxuXZog3mlbrli/${encodeURIComponent('Lessons')}?sort[0][field]=Date+submitted&sort[0][direction]=desc`;
+    const url = `https://api.airtable.com/v0/apppxuXZog3mlbrli/tbltz4VhRS6bnYPOz`;
     const res = await fetch(url, { headers: { Authorization: `Bearer patECg2gZL4t7qA9s.4e6c05ef2848c4d9797d6c94faf64dc98b43de6b43995fbbc8ac6038616e7468` } });
     if (!res.ok) throw new Error('Airtable error (' + res.status + ')');
     const data = await res.json();
