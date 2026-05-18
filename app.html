@@ -4,763 +4,635 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Farm Learning / Aprendizaje de Granja</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --green-deep: #1a3a2a;
-    --green-mid: #2d6a4f;
-    --green-light: #52b788;
-    --green-pale: #d8f3dc;
-    --cream: #f8f4ee;
-    --cream-dark: #ede8df;
-    --amber: #e9a84c;
-    --amber-light: #fdf0d5;
-    --text-dark: #1a2016;
-    --text-mid: #3d5a40;
-    --text-muted: #7a8c6e;
-    --white: #ffffff;
-    --card-radius: 20px;
-    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream:       #f5efe4;
+  --cream-dark:  #ede4d3;
+  --cream-deep:  #e0d4be;
+  --straw:       #c8962a;
+  --straw-light: #f5dfa0;
+  --straw-pale:  #fdf4dc;
+  --barn:        #8b2e1a;
+  --barn-mid:    #a83828;
+  --barn-pale:   #f5e8e5;
+  --soil:        #3b2510;
+  --soil-mid:    #5c3d20;
+  --soil-light:  #8a6040;
+  --milk:        #fdfaf4;
+  --sky:         #a8bfd4;
+  --sky-pale:    #e8f0f8;
+  --text:        #2a1a0a;
+  --text-mid:    #5c3d20;
+  --text-muted:  #9a7a5a;
+  --border:      rgba(139,46,26,0.12);
+  --border-warm: rgba(139,46,26,0.25);
+  --r:           18px;
+  --card-h:      440px;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text-dark);
-    min-height: 100vh;
-    background-image: radial-gradient(circle at 20% 20%, rgba(82,183,136,0.08) 0%, transparent 50%),
-                      radial-gradient(circle at 80% 80%, rgba(233,168,76,0.06) 0%, transparent 50%);
-  }
+body {
+  font-family: 'Lato', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8962a' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--green-deep);
-    padding: 1.25rem 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+/* ── HEADER ── */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--barn);
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 3px solid var(--straw);
+}
 
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
+.logo { display: flex; align-items: center; gap: 12px; }
 
-  .logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--green-light);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.logo-mark {
+  width: 38px; height: 38px; border-radius: 10px;
+  background: var(--straw-light); border: 2px solid var(--straw);
+  display: flex; align-items: center; justify-content: center;
+}
 
-  .logo-icon svg { width: 20px; height: 20px; fill: var(--green-deep); }
+.logo-mark svg { width: 20px; height: 20px; fill: var(--barn); }
 
-  .logo-text {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.2;
-  }
+.logo-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--milk); line-height: 1.1;
+}
 
-  .logo-text span {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: var(--green-light);
-    letter-spacing: 0.05em;
-  }
+.logo-text small {
+  display: block; font-family: 'Lato', sans-serif;
+  font-size: 0.65rem; font-weight: 400;
+  color: var(--straw-light); letter-spacing: 0.1em; text-transform: uppercase;
+}
 
-  .lang-toggle {
-    display: flex;
-    background: rgba(255,255,255,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-  }
+.header-right { display: flex; align-items: center; gap: 14px; }
 
-  .lang-btn {
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    color: rgba(255,255,255,0.6);
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    transition: var(--transition);
-    letter-spacing: 0.03em;
-  }
+.counter-badge { font-size: 13px; color: var(--straw-light); }
+.counter-badge span { color: #fff; font-weight: 700; }
 
-  .lang-btn.active {
-    background: var(--green-light);
-    color: var(--green-deep);
-  }
+.lang-toggle {
+  display: flex;
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; overflow: hidden;
+}
 
-  /* ── HERO ── */
-  .hero {
-    padding: 2.5rem 2rem 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+.lang-btn {
+  padding: 5px 13px; font-size: 12px; font-weight: 700;
+  font-family: 'Lato', sans-serif; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.55); border: none; background: transparent;
+  cursor: pointer; transition: all 0.2s;
+}
 
-  .hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(1.6rem, 4vw, 2.4rem);
-    font-weight: 700;
-    color: var(--green-deep);
-    line-height: 1.15;
-    margin-bottom: 0.5rem;
-  }
+.lang-btn.active { background: var(--straw); color: var(--soil); }
 
-  .hero p {
-    font-size: 0.95rem;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
+/* ── FILTERS ── */
+.filters {
+  display: flex; gap: 8px; padding: 1.25rem 2rem 0;
+  flex-wrap: wrap; align-items: center;
+  max-width: 900px; margin: 0 auto;
+}
 
-  /* ── FILTERS ── */
-  .filters {
-    padding: 0 2rem 1.5rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
+.filter-label {
+  font-size: 11px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.1em; font-weight: 700; margin-right: 4px;
+}
 
-  .filter-label {
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-right: 4px;
-  }
+.filter-pill {
+  padding: 5px 16px; border-radius: 20px; font-size: 12px; font-weight: 700;
+  font-family: 'Lato', sans-serif; letter-spacing: 0.03em;
+  border: 1.5px solid var(--cream-deep);
+  background: var(--milk); color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+}
 
-  .filter-pill {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    border: 1.5px solid var(--cream-dark);
-    background: var(--white);
-    color: var(--text-mid);
-    cursor: pointer;
-    transition: var(--transition);
-  }
+.filter-pill:hover { border-color: var(--barn-mid); color: var(--barn); }
+.filter-pill.active { background: var(--barn); border-color: var(--barn); color: var(--milk); }
 
-  .filter-pill:hover { border-color: var(--green-light); color: var(--green-mid); }
-  .filter-pill.active {
-    background: var(--green-mid);
-    border-color: var(--green-mid);
-    color: var(--white);
-  }
+/* ── DECK STAGE ── */
+.deck-stage {
+  max-width: 900px; margin: 1.75rem auto; padding: 0 2rem 3rem;
+}
 
-  /* ── CARD GRID ── */
-  .card-grid {
-    padding: 0 2rem 3rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-  }
+.progress-bar {
+  height: 3px; background: var(--cream-deep);
+  border-radius: 2px; margin-bottom: 1.25rem; overflow: hidden;
+}
 
-  /* ── LEARNING CARD ── */
-  .card {
-    background: var(--white);
-    border-radius: var(--card-radius);
-    overflow: hidden;
-    border: 1px solid rgba(0,0,0,0.06);
-    transition: var(--transition);
-    cursor: pointer;
-    animation: fadeUp 0.4s ease both;
-  }
+.progress-fill {
+  height: 100%; background: var(--straw);
+  border-radius: 2px; transition: width 0.35s ease;
+}
 
-  .card:hover { transform: translateY(-4px); border-color: var(--green-light); }
+.hint {
+  text-align: center; font-size: 12px; color: var(--text-muted);
+  margin-bottom: 1.25rem; display: flex; align-items: center;
+  justify-content: center; gap: 6px; letter-spacing: 0.03em;
+}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* ── FLIP CARD ── */
+.flip-scene {
+  width: 100%; height: var(--card-h);
+  perspective: 1400px; cursor: pointer; margin-bottom: 1.5rem;
+}
 
-  .card-image {
-    width: 100%;
-    aspect-ratio: 16/10;
-    object-fit: cover;
-    display: block;
-    background: var(--green-pale);
-  }
+.flip-card {
+  width: 100%; height: 100%;
+  position: relative; transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
 
-  .card-image-placeholder {
-    width: 100%;
-    aspect-ratio: 16/10;
-    background: linear-gradient(135deg, var(--green-pale) 0%, var(--cream-dark) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.flip-scene.flipped .flip-card { transform: rotateY(180deg); }
 
-  .card-image-placeholder svg {
-    width: 48px;
-    height: 48px;
-    opacity: 0.3;
-    fill: var(--green-mid);
-  }
+.card-face {
+  position: absolute; inset: 0;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: var(--r); overflow: hidden;
+}
 
-  .card-body { padding: 1.25rem; }
+/* FRONT */
+.card-front {
+  background: var(--milk);
+  border: 2px solid var(--cream-deep);
+  display: flex; flex-direction: column;
+  box-shadow: 0 4px 24px rgba(59,37,16,0.1), 0 1px 4px rgba(59,37,16,0.06);
+}
 
-  .card-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
+.card-front-img {
+  flex: 1; background: var(--cream-dark); position: relative; overflow: hidden;
+}
 
-  .card-category {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.07em;
-    text-transform: uppercase;
-    color: var(--green-mid);
-    background: var(--green-pale);
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
+.card-front-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  .card-date {
-    font-size: 11px;
-    color: var(--text-muted);
-    font-weight: 300;
-  }
+.no-img {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 12px; color: var(--text-muted);
+}
 
-  .card-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 8px;
-    line-height: 1.35;
-  }
+.no-img svg { width: 52px; height: 52px; opacity: 0.2; fill: var(--soil-mid); }
+.no-img span { font-size: 13px; color: var(--text-muted); }
 
-  .card-annotation {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    line-height: 1.6;
-    font-weight: 300;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+.flip-cue {
+  position: absolute; bottom: 12px; right: 12px;
+  background: rgba(253,244,220,0.92);
+  border: 1px solid var(--straw);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 11px; color: var(--straw); font-weight: 700;
+  display: flex; align-items: center; gap: 5px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
 
-  .card-footer {
-    padding: 0.875rem 1.25rem;
-    border-top: 1px solid var(--cream-dark);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+.card-front-bar {
+  padding: 1rem 1.25rem; background: var(--milk);
+  display: flex; align-items: center; justify-content: space-between;
+  border-top: 2px solid var(--cream-dark); flex-shrink: 0;
+}
 
-  .educator-tag {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: var(--text-muted);
-  }
+.card-front-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem; font-weight: 600; color: var(--text);
+  line-height: 1.3; flex: 1; margin-right: 1rem;
+}
 
-  .educator-avatar {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--amber-light);
-    color: var(--amber);
-    font-size: 10px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.cat-pill {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 20px;
+  background: var(--barn-pale); color: var(--barn);
+  border: 1px solid rgba(139,46,26,0.2); white-space: nowrap; flex-shrink: 0;
+}
 
-  .audio-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    background: var(--amber-light);
-    border: 1.5px solid var(--amber);
-    color: #9a6e1a;
-    font-size: 12px;
-    font-weight: 500;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    transition: var(--transition);
-  }
+/* BACK */
+.card-back {
+  background: var(--straw-pale);
+  border: 2px solid var(--straw);
+  transform: rotateY(180deg);
+  display: flex; flex-direction: column;
+  padding: 1.75rem; gap: 1.25rem;
+  box-shadow: 0 4px 24px rgba(59,37,16,0.1), 0 1px 4px rgba(59,37,16,0.06);
+}
 
-  .audio-btn:hover { background: var(--amber); color: var(--white); }
-  .audio-btn.playing { background: var(--amber); color: var(--white); }
+.back-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 1rem;
+}
 
-  .audio-btn svg { width: 14px; height: 14px; }
+.back-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem; font-weight: 700;
+  color: var(--soil); line-height: 1.3;
+}
 
-  /* ── MODAL ── */
-  .modal-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(26,58,42,0.6);
-    backdrop-filter: blur(4px);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
+.back-divider {
+  height: 2px; background: var(--straw-light);
+  border-radius: 1px; flex-shrink: 0;
+}
 
-  .modal-backdrop.open { display: flex; }
+.back-annotation {
+  font-size: 0.925rem; color: var(--soil-mid);
+  line-height: 1.85; font-weight: 400; flex: 1; overflow-y: auto;
+}
 
-  .modal {
-    background: var(--white);
-    border-radius: var(--card-radius);
-    width: 100%;
-    max-width: 620px;
-    max-height: 90vh;
-    overflow-y: auto;
-    animation: modalIn 0.25s cubic-bezier(0.4,0,0.2,1);
-  }
+/* Audio */
+.audio-player {
+  background: var(--cream); border: 1.5px solid var(--cream-deep);
+  border-radius: 14px; padding: 0.875rem 1rem;
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
 
-  @keyframes modalIn {
-    from { opacity:0; transform: scale(0.95) translateY(10px); }
-    to   { opacity:1; transform: scale(1) translateY(0); }
-  }
+.play-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--barn); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background 0.2s, transform 0.15s;
+}
 
-  .modal-image {
-    width: 100%;
-    aspect-ratio: 16/9;
-    object-fit: cover;
-    border-radius: var(--card-radius) var(--card-radius) 0 0;
-    background: var(--green-pale);
-  }
+.play-btn:hover { background: var(--barn-mid); transform: scale(1.05); }
+.play-btn:active { transform: scale(0.97); }
+.play-btn svg { width: 15px; height: 15px; fill: var(--milk); margin-left: 2px; }
+.play-btn.playing svg { margin-left: 0; }
 
-  .modal-image-placeholder {
-    width: 100%;
-    aspect-ratio: 16/9;
-    background: var(--green-pale);
-    border-radius: var(--card-radius) var(--card-radius) 0 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.audio-info { flex: 1; min-width: 0; }
 
-  .modal-image-placeholder svg { width: 64px; height: 64px; fill: var(--green-mid); opacity: 0.25; }
+.audio-label {
+  font-size: 10px; color: var(--text-muted); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
+}
 
-  .modal-content { padding: 1.5rem; }
+.audio-track { height: 3px; background: var(--cream-deep); border-radius: 2px; overflow: hidden; }
+.audio-fill { height: 100%; background: var(--barn); border-radius: 2px; width: 0%; transition: width 0.1s linear; }
+.audio-time { font-size: 11px; color: var(--text-muted); margin-top: 5px; font-variant-numeric: tabular-nums; }
 
-  .modal-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
+.back-footer {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding-top: 0.25rem;
+}
 
-  .modal-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    line-height: 1.25;
-  }
+.edu-avatar {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--straw-light); color: var(--soil-mid);
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--straw); flex-shrink: 0;
+}
 
-  .modal-close {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1.5px solid var(--cream-dark);
-    background: transparent;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: var(--transition);
-    color: var(--text-muted);
-    font-size: 18px;
-    line-height: 1;
-  }
+.back-educator { font-size: 12px; color: var(--text-muted); flex: 1; }
 
-  .modal-close:hover { background: var(--cream-dark); color: var(--text-dark); }
+.flip-back-cue {
+  font-size: 11px; color: var(--text-muted); font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 4px; cursor: pointer;
+  transition: color 0.2s;
+}
 
-  .modal-category-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 1rem;
-    align-items: center;
-  }
+.flip-back-cue:hover { color: var(--barn); }
 
-  .modal-annotation {
-    font-size: 0.95rem;
-    color: var(--text-mid);
-    line-height: 1.7;
-    font-weight: 300;
-    margin-bottom: 1.25rem;
-  }
+/* ── NAV ── */
+.card-nav {
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+}
 
-  .modal-audio {
-    background: var(--cream);
-    border-radius: 12px;
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 1rem;
-  }
+.nav-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1.5px solid var(--cream-deep);
+  background: var(--milk); color: var(--text-muted);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  box-shadow: 0 1px 4px rgba(59,37,16,0.08);
+}
 
-  .modal-audio-play {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--green-mid);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    transition: var(--transition);
-  }
+.nav-btn:hover:not(:disabled) { border-color: var(--barn); color: var(--barn); background: var(--barn-pale); }
+.nav-btn:disabled { opacity: 0.3; cursor: default; }
+.nav-btn svg { width: 18px; height: 18px; }
 
-  .modal-audio-play:hover { background: var(--green-deep); }
-  .modal-audio-play svg { width: 16px; height: 16px; fill: var(--white); margin-left: 2px; }
-  .modal-audio-play.playing svg { margin-left: 0; }
+.nav-dots { display: flex; gap: 6px; align-items: center; }
 
-  .modal-audio-info { flex: 1; }
-  .modal-audio-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-  .modal-audio-bar {
-    height: 4px;
-    background: var(--cream-dark);
-    border-radius: 2px;
-    overflow: hidden;
-  }
+.nav-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--cream-deep); border: 1.5px solid var(--cream-deep);
+  transition: all 0.2s; cursor: pointer;
+}
 
-  .modal-audio-progress {
-    height: 100%;
-    background: var(--green-light);
-    border-radius: 2px;
-    width: 0%;
-    transition: width 0.1s linear;
-  }
+.nav-dot.active { background: var(--barn); border-color: var(--barn); width: 22px; border-radius: 4px; }
 
-  .modal-footer-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--text-muted);
-    padding-top: 1rem;
-    border-top: 1px solid var(--cream-dark);
-  }
+/* ── STATE ── */
+.state-msg {
+  text-align: center; padding: 5rem 2rem; color: var(--text-muted);
+}
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 4rem 2rem;
-    color: var(--text-muted);
-  }
+.state-msg h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem; color: var(--soil-mid); margin-bottom: 0.5rem;
+}
 
-  .empty-state svg { width: 48px; height: 48px; fill: var(--cream-dark); margin-bottom: 1rem; }
-  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 1.1rem; color: var(--text-mid); margin-bottom: 0.5rem; }
-  .empty-state p { font-size: 0.875rem; font-weight: 300; }
+.state-msg p { font-size: 0.875rem; }
 
-  /* ── AIRTABLE CONFIG BANNER ── */
-  .config-banner {
-    background: var(--amber-light);
-    border-bottom: 1.5px solid var(--amber);
-    padding: 0.75rem 2rem;
-    font-size: 13px;
-    color: #7a5010;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .config-banner a { color: #9a6e1a; font-weight: 500; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    header { padding: 1rem; }
-    .hero, .filters, .card-grid { padding-left: 1rem; padding-right: 1rem; }
-    .card-grid { grid-template-columns: 1fr; gap: 14px; }
-    .hero { padding-top: 1.5rem; }
-  }
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  header { padding: 0.875rem 1rem; }
+  .filters, .deck-stage { padding-left: 1rem; padding-right: 1rem; }
+  :root { --card-h: 400px; }
+  .card-back { padding: 1.25rem; gap: 1rem; }
+  .back-annotation { font-size: 0.875rem; }
+  .logo-text small { display: none; }
+}
 </style>
 </head>
 <body>
 
-
-
 <header>
   <div class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M17 3.34A9.99 9.99 0 0 1 22 12c0 5.52-4.48 10-10 10S2 17.52 2 12c0-3.15 1.46-5.97 3.75-7.83L7 5.5C5.17 7.07 4 9.4 4 12c0 4.42 3.58 8 8 8s8-3.58 8-8c0-2.6-1.24-4.91-3.17-6.42L17 3.34z"/></svg>
+    <div class="logo-mark">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
     </div>
     <div class="logo-text">
-      <span data-en="Farm Learning" data-es="Aprendizaje de Granja">Farm Learning</span>
-      <span data-en="Milker Training Programme" data-es="Programa de Capacitación">Milker Training Programme</span>
+      Farm Learning
+      <small data-en="Milker Training Programme" data-es="Capacitación de Ordeñadores">Milker Training Programme</small>
     </div>
   </div>
-  <div class="lang-toggle">
-    <button class="lang-btn active" onclick="setLang('en')">EN</button>
-    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  <div class="header-right">
+    <span class="counter-badge" id="counterBadge"></span>
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('es')">ES</button>
+    </div>
   </div>
 </header>
 
-<div class="hero">
-  <h1 data-en="Learning Cards" data-es="Tarjetas de Aprendizaje">Learning Cards</h1>
-  <p data-en="Browse lessons shared by your educators. Tap a card to read and listen." data-es="Explora las lecciones compartidas por tus educadores. Toca una tarjeta para leer y escuchar.">Browse lessons shared by your educators. Tap a card to read and listen.</p>
-</div>
-
 <div class="filters">
-  <span class="filter-label" data-en="Filter" data-es="Filtrar">Filter</span>
-  <button class="filter-pill active" onclick="filterCards('All')" data-en="All" data-es="Todo">All</button>
-  <button class="filter-pill" onclick="filterCards('Hygiene')" data-en="Hygiene" data-es="Higiene">Hygiene</button>
-  <button class="filter-pill" onclick="filterCards('Equipment')" data-en="Equipment" data-es="Equipo">Equipment</button>
-  <button class="filter-pill" onclick="filterCards('Technique')" data-en="Technique" data-es="Técnica">Technique</button>
-  <button class="filter-pill" onclick="filterCards('Health')" data-en="Health" data-es="Salud">Health</button>
+  <span class="filter-label" data-en="Topic" data-es="Tema">Topic</span>
+  <button class="filter-pill active" onclick="filterCards('All',this)" data-en="All" data-es="Todo">All</button>
+  <button class="filter-pill" onclick="filterCards('Hygiene',this)" data-en="Hygiene" data-es="Higiene">Hygiene</button>
+  <button class="filter-pill" onclick="filterCards('Equipment',this)" data-en="Equipment" data-es="Equipo">Equipment</button>
+  <button class="filter-pill" onclick="filterCards('Technique',this)" data-en="Technique" data-es="Técnica">Technique</button>
+  <button class="filter-pill" onclick="filterCards('Health',this)" data-en="Health" data-es="Salud">Health</button>
 </div>
 
-<div class="card-grid" id="cardGrid"></div>
+<div class="deck-stage">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 
-<!-- Modal -->
-<div class="modal-backdrop" id="modalBackdrop" onclick="closeModal(event)">
-  <div class="modal" id="modal">
-    <div id="modalImageWrap"></div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle"></div>
-        <button class="modal-close" onclick="closeModalDirect()" aria-label="Close">×</button>
-      </div>
-      <div class="modal-category-row">
-        <span class="card-category" id="modalCategory"></span>
-        <span class="card-date" id="modalDate"></span>
-      </div>
-      <div class="modal-annotation" id="modalAnnotation"></div>
-      <div class="modal-audio" id="modalAudio">
-        <button class="modal-audio-play" id="modalPlayBtn" onclick="toggleModalAudio()">
-          <svg id="modalPlayIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-        </button>
-        <div class="modal-audio-info">
-          <div class="modal-audio-label" data-en="Audio explanation" data-es="Explicación de audio" id="audioLabel">Audio explanation</div>
-          <div class="modal-audio-bar"><div class="modal-audio-progress" id="audioProgress"></div></div>
+  <div class="hint">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
+    <span id="hintText" data-en="Tap the card to flip it" data-es="Toca la tarjeta para voltearla">Tap the card to flip it</span>
+  </div>
+
+  <div class="flip-scene" id="flipScene" onclick="flipCard()">
+    <div class="flip-card" id="flipCard">
+
+      <!-- FRONT -->
+      <div class="card-face card-front">
+        <div class="card-front-img" id="frontImg">
+          <div class="no-img">
+            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+            <span id="noImgText">No image yet</span>
+          </div>
+        </div>
+        <div class="flip-cue">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
+          <span data-en="Tap to flip" data-es="Voltear">Tap to flip</span>
+        </div>
+        <div class="card-front-bar">
+          <div class="card-front-title" id="frontTitle">Loading...</div>
+          <span class="cat-pill" id="frontCat"></span>
         </div>
       </div>
-      <div class="modal-footer-info">
-        <span id="modalEducator"></span>
-        <span id="modalCardCount"></span>
+
+      <!-- BACK -->
+      <div class="card-face card-back">
+        <div class="back-top">
+          <div class="back-title" id="backTitle"></div>
+          <span class="cat-pill" id="backCat"></span>
+        </div>
+        <div class="back-divider"></div>
+        <div class="back-annotation" id="backAnnotation"></div>
+        <div class="audio-player" id="audioPlayer">
+          <button class="play-btn" id="playBtn" onclick="event.stopPropagation();toggleAudio()">
+            <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <div class="audio-info">
+            <div class="audio-label" id="audioLabel">Audio explanation</div>
+            <div class="audio-track"><div class="audio-fill" id="audioFill"></div></div>
+            <div class="audio-time" id="audioTime">0:00</div>
+          </div>
+        </div>
+        <div class="back-footer">
+          <div class="edu-avatar" id="backAvatar"></div>
+          <span class="back-educator" id="backEducator"></span>
+          <span class="flip-back-cue" onclick="event.stopPropagation();unflip()">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
+            <span data-en="Flip back" data-es="Voltear">Flip back</span>
+          </span>
+        </div>
       </div>
+
     </div>
   </div>
+
+  <div class="card-nav" id="cardNav">
+    <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="nav-dots" id="navDots"></div>
+    <button class="nav-btn" id="nextBtn" onclick="navigate(1)" aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+  </div>
+
+  <div id="stateMsg" class="state-msg" style="display:none"></div>
 </div>
 
 <script>
-let SAMPLE_CARDS = [];
+let allCards=[], filtered=[], current=0, lang='en';
+let isFlipped=false, audioEl=null, audioPlaying=false;
 
-async function fetchFromAirtable() {
-  const grid = document.getElementById('cardGrid');
-  grid.innerHTML = `<div class="empty-state"><p style="color:var(--text-muted);font-size:14px">Loading cards...</p></div>`;
-  try {
-    const url = `https://api.airtable.com/v0/apppxuXZog3mlbrli/tbltz4VhRS6bnYPOz`;
-    const res = await fetch(url, { headers: { Authorization: `Bearer patECg2gZL4t7qA9s.4e6c05ef2848c4d9797d6c94faf64dc98b43de6b43995fbbc8ac6038616e7468` } });
-    if (!res.ok) throw new Error('Airtable error (' + res.status + ')');
-    const data = await res.json();
-    SAMPLE_CARDS = data.records.map((rec) => {
-      const f = rec.fields;
-      const imageAttachments = f['Image'] || [];
-      const audioAttachments = f['Audio'] || [];
-      return {
-        id: rec.id,
-        title: f['Lesson title'] || 'Untitled',
-        titleEs: f['Lesson title'] || 'Sin título',
-        category: f['Category'] || 'General',
-        annotation: f['Annotation'] || '',
-        annotationEs: f['Annotation'] || '',
-        educator: f['Educator'] || 'Unknown',
-        date: f['Date submitted'] ? new Date(f['Date submitted']).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '',
-        hasAudio: audioAttachments.length > 0,
-        audioUrl: audioAttachments.length > 0 ? audioAttachments[0].url : null,
-        imageUrl: imageAttachments.length > 0 ? imageAttachments[0].url : null,
+const CAT={
+  en:{Hygiene:'Hygiene',Equipment:'Equipment',Technique:'Technique',Health:'Health',General:'General'},
+  es:{Hygiene:'Higiene',Equipment:'Equipo',Technique:'Técnica',Health:'Salud',General:'General'}
+};
+
+async function fetchCards(){
+  showState('<h3>Loading cards...</h3>');
+  try{
+    const res=await fetch('https://api.airtable.com/v0/apppxuXZog3mlbrli/tbltz4VhRS6bnYPOz',{
+      headers:{Authorization:'Bearer patECg2gZL4t7qA9s.4e6c05ef2848c4d9797d6c94faf64dc98b43de6b43995fbbc8ac6038616e7468'}
+    });
+    if(!res.ok) throw new Error('Airtable error '+res.status);
+    const data=await res.json();
+    allCards=(data.records||[]).map(rec=>{
+      const f=rec.fields||{};
+      const imgs=f['Image']||[], auds=f['Audio']||[];
+      return{
+        id:rec.id,
+        title:f['Lesson title']||'Untitled',
+        category:f['Category']||'General',
+        annotation:f['Annotation']||'',
+        educator:f['Educator']||'',
+        imageUrl:imgs.length?imgs[0].url:null,
+        audioUrl:auds.length?auds[0].url:null,
+        hasAudio:auds.length>0,
       };
     });
-    renderCards();
-  } catch (err) {
-    grid.innerHTML = `<div class="empty-state"><h3>Could not load cards</h3><p style="font-size:13px;margin-top:6px">${err.message}</p></div>`;
+    filtered=[...allCards];
+    current=0;
+    hideState();
+    renderCard();
+    renderDots();
+  }catch(e){
+    showState(`<h3>Could not load cards</h3><p>${e.message}</p>`);
   }
 }
 
-let currentLang = 'en';
-let currentFilter = 'All';
-let currentCard = null;
-let audioTimer = null;
-let audioPlaying = false;
-let audioProgress = 0;
-
-function setLang(lang) {
-  currentLang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.lang-btn:${lang === 'en' ? 'first' : 'last'}-child`).classList.add('active');
-  document.querySelectorAll('[data-en]').forEach(el => {
-    el.textContent = lang === 'en' ? el.dataset.en : el.dataset.es;
-  });
-  renderCards();
+function showState(html){
+  document.getElementById('stateMsg').innerHTML=html;
+  document.getElementById('stateMsg').style.display='block';
+  document.getElementById('flipScene').style.display='none';
+  document.getElementById('cardNav').style.display='none';
 }
 
-function filterCards(cat) {
-  currentFilter = cat;
-  document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
-  event.target.classList.add('active');
-  renderCards();
+function hideState(){
+  document.getElementById('stateMsg').style.display='none';
+  document.getElementById('flipScene').style.display='block';
+  document.getElementById('cardNav').style.display='flex';
 }
 
-function renderCards() {
-  const grid = document.getElementById('cardGrid');
-  const filtered = currentFilter === 'All' ? SAMPLE_CARDS : SAMPLE_CARDS.filter(c => c.category === currentFilter);
-  
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM4 4h16v10H4V4zm0 16v-4h4v4H4zm6 0v-4h4v4h-4zm6 0v-4h4v4h-4z"/></svg><h3>${currentLang==='en'?'No cards found':'No se encontraron tarjetas'}</h3><p>${currentLang==='en'?'Try a different category filter.':'Prueba con un filtro de categoría diferente.'}</p></div>`;
+function renderCard(){
+  if(!filtered.length){
+    showState(`<h3>${lang==='en'?'No cards found':'Sin tarjetas'}</h3><p>${lang==='en'?'Try a different filter.':'Prueba otro filtro.'}</p>`);
     return;
   }
+  hideState(); stopAudio(); unflip();
+  const card=filtered[current];
+  const catLabel=CAT[lang][card.category]||card.category;
+  const initials=card.educator.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
 
-  grid.innerHTML = filtered.map((card, i) => {
-    const title = currentLang === 'en' ? card.title : card.titleEs;
-    const annotation = currentLang === 'en' ? card.annotation : card.annotationEs;
-    const catLabel = getCatLabel(card.category);
-    const initials = card.educator.split(' ').map(w => w[0]).join('');
-    return `
-    <div class="card" style="animation-delay:${i*0.06}s" onclick="openModal('${card.id}')">
-      ${card.imageUrl
-        ? `<img class="card-image" src="${card.imageUrl}" alt="${title}">`
-        : `<div class="card-image-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>`}
-      <div class="card-body">
-        <div class="card-meta">
-          <span class="card-category">${catLabel}</span>
-          <span class="card-date">${card.date}</span>
-        </div>
-        <div class="card-title">${title}</div>
-        <div class="card-annotation">${annotation}</div>
-      </div>
-      <div class="card-footer">
-        <div class="educator-tag">
-          <div class="educator-avatar">${initials}</div>
-          ${card.educator}
-        </div>
-        ${card.hasAudio ? `<button class="audio-btn" onclick="event.stopPropagation();openModal('${card.id}')">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
-          ${currentLang==='en'?'Listen':'Escuchar'}
-        </button>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
+  const fi=document.getElementById('frontImg');
+  fi.innerHTML=card.imageUrl
+    ?`<img src="${card.imageUrl}" alt="${card.title}" style="width:100%;height:100%;object-fit:cover;display:block">`
+    :`<div class="no-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg><span>${lang==='en'?'No image yet':'Sin imagen'}</span></div>`;
 
-function getCatLabel(cat) {
-  const labels = { Hygiene: currentLang==='en'?'Hygiene':'Higiene', Equipment: currentLang==='en'?'Equipment':'Equipo', Technique: currentLang==='en'?'Technique':'Técnica', Health: currentLang==='en'?'Health':'Salud' };
-  return labels[cat] || cat;
-}
+  document.getElementById('frontTitle').textContent=card.title;
+  document.getElementById('frontCat').textContent=catLabel;
+  document.getElementById('backTitle').textContent=card.title;
+  document.getElementById('backCat').textContent=catLabel;
+  document.getElementById('backAnnotation').textContent=card.annotation||(lang==='en'?'No annotation added yet.':'Sin anotación todavía.');
+  document.getElementById('backAvatar').textContent=initials;
+  document.getElementById('backEducator').textContent=card.educator||'—';
+  document.getElementById('audioLabel').textContent=lang==='en'?'Audio explanation':'Explicación de audio';
+  document.getElementById('audioPlayer').style.display=card.hasAudio?'flex':'none';
 
-function openModal(id) {
-  const card = SAMPLE_CARDS.find(c => c.id === id);
-  if (!card) return;
-  currentCard = card;
-  stopAudio();
-
-  const title = currentLang === 'en' ? card.title : card.titleEs;
-  const annotation = currentLang === 'en' ? card.annotation : card.annotationEs;
-  const initials = card.educator.split(' ').map(w => w[0]).join('');
-  const idx = SAMPLE_CARDS.indexOf(card) + 1;
-
-  document.getElementById('modalTitle').textContent = title;
-  document.getElementById('modalCategory').textContent = getCatLabel(card.category);
-  document.getElementById('modalDate').textContent = card.date;
-  document.getElementById('modalAnnotation').textContent = annotation;
-  document.getElementById('modalEducator').innerHTML = `<span style="display:flex;align-items:center;gap:6px"><span class="educator-avatar" style="width:22px;height:22px;border-radius:50%;background:#fdf0d5;color:#e9a84c;font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">${initials}</span>${card.educator}</span>`;
-  document.getElementById('modalCardCount').textContent = `${currentLang==='en'?'Card':'Tarjeta'} ${idx} ${currentLang==='en'?'of':'de'} ${SAMPLE_CARDS.length}`;
-
-  document.getElementById('modalImageWrap').innerHTML = card.imageUrl
-    ? `<img class="modal-image" src="${card.imageUrl}" alt="${title}">`
-    : `<div class="modal-image-placeholder"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>`;
-
-  const audioSection = document.getElementById('modalAudio');
-  audioSection.style.display = card.hasAudio ? 'flex' : 'none';
-  document.getElementById('audioLabel').textContent = currentLang === 'en' ? 'Audio explanation' : 'Explicación de audio';
-
-  if (card.audioUrl) {
-    window._currentAudio = new Audio(card.audioUrl);
-    window._currentAudio.ontimeupdate = () => {
-      const pct = (window._currentAudio.currentTime / window._currentAudio.duration) * 100;
-      document.getElementById('audioProgress').style.width = Math.min(pct||0, 100) + '%';
+  audioEl=card.audioUrl?new Audio(card.audioUrl):null;
+  if(audioEl){
+    audioEl.ontimeupdate=()=>{
+      const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
+      document.getElementById('audioFill').style.width=pct+'%';
+      document.getElementById('audioTime').textContent=fmt(audioEl.currentTime);
     };
-    window._currentAudio.onended = stopAudio;
-  } else {
-    window._currentAudio = null;
+    audioEl.onended=stopAudio;
   }
 
-  document.getElementById('modalBackdrop').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const pct=filtered.length>1?(current/(filtered.length-1))*100:100;
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('prevBtn').disabled=current===0;
+  document.getElementById('nextBtn').disabled=current===filtered.length-1;
+  updateCounter(); updateDots();
 }
 
-function closeModal(e) {
-  if (e.target === document.getElementById('modalBackdrop')) closeModalDirect();
+function flipCard(){
+  isFlipped=!isFlipped;
+  document.getElementById('flipScene').classList.toggle('flipped',isFlipped);
+  document.getElementById('hintText').textContent=isFlipped
+    ?(lang==='en'?'Tap to flip back':'Toca para voltear')
+    :(lang==='en'?'Tap the card to flip it':'Toca la tarjeta para voltearla');
 }
 
-function closeModalDirect() {
-  stopAudio();
-  document.getElementById('modalBackdrop').classList.remove('open');
-  document.body.style.overflow = '';
+function unflip(){
+  isFlipped=false;
+  document.getElementById('flipScene').classList.remove('flipped');
+  document.getElementById('hintText').textContent=lang==='en'?'Tap the card to flip it':'Toca la tarjeta para voltearla';
 }
 
-function toggleModalAudio() {
-  if (audioPlaying) { stopAudio(); return; }
-  audioPlaying = true;
-  document.getElementById('modalPlayBtn').classList.add('playing');
-  document.getElementById('modalPlayIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-  if (window._currentAudio) {
-    window._currentAudio.play();
-  } else {
-    const duration = 30000;
-    const interval = 100;
-    let elapsed = 0;
-    audioTimer = setInterval(() => {
-      elapsed += interval;
-      document.getElementById('audioProgress').style.width = Math.min((elapsed/duration)*100, 100) + '%';
-      if (elapsed >= duration) stopAudio();
-    }, interval);
-  }
+function navigate(dir){
+  const n=current+dir;
+  if(n<0||n>=filtered.length) return;
+  current=n; renderCard();
 }
 
-function stopAudio() {
-  audioPlaying = false;
-  clearInterval(audioTimer);
-  if (window._currentAudio) { window._currentAudio.pause(); window._currentAudio.currentTime = 0; }
-  const btn = document.getElementById('modalPlayBtn');
-  const icon = document.getElementById('modalPlayIcon');
-  if (btn) btn.classList.remove('playing');
-  if (icon) icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-  const bar = document.getElementById('audioProgress');
-  if (bar) bar.style.width = '0%';
+function renderDots(){
+  const max=Math.min(filtered.length,7);
+  document.getElementById('navDots').innerHTML=Array.from({length:max},(_,i)=>
+    `<div class="nav-dot" onclick="jumpTo(${i})"></div>`
+  ).join('');
+  updateDots();
 }
 
-fetchFromAirtable();
+function updateDots(){
+  const dots=document.querySelectorAll('.nav-dot');
+  const max=dots.length; if(!max) return;
+  const idx=max>1?Math.round((current/Math.max(filtered.length-1,1))*(max-1)):0;
+  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+function jumpTo(dotIdx){
+  const max=Math.min(filtered.length,7);
+  current=max>1?Math.round((dotIdx/(max-1))*(filtered.length-1)):0;
+  renderCard();
+}
+
+function updateCounter(){
+  const el=document.getElementById('counterBadge');
+  el.innerHTML=filtered.length?`<span>${current+1}</span> / ${filtered.length}`:'';
+}
+
+function filterCards(cat,btn){
+  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  filtered=cat==='All'?[...allCards]:allCards.filter(c=>c.category===cat);
+  current=0; renderCard(); renderDots();
+}
+
+function toggleAudio(){
+  if(!audioEl) return;
+  if(audioPlaying){stopAudio();return;}
+  audioPlaying=true;
+  document.getElementById('playBtn').classList.add('playing');
+  document.getElementById('playIcon').innerHTML='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
+  audioEl.play().catch(stopAudio);
+}
+
+function stopAudio(){
+  audioPlaying=false;
+  if(audioEl){audioEl.pause();audioEl.currentTime=0;}
+  const btn=document.getElementById('playBtn');
+  const icon=document.getElementById('playIcon');
+  if(btn) btn.classList.remove('playing');
+  if(icon) icon.innerHTML='<path d="M8 5v14l11-7z"/>';
+  const fill=document.getElementById('audioFill');
+  const time=document.getElementById('audioTime');
+  if(fill) fill.style.width='0%';
+  if(time) time.textContent='0:00';
+}
+
+function fmt(s){return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0');}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn:${l==='en'?'first':'last'}-child`).classList.add('active');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    el.textContent=l==='en'?el.dataset.en:el.dataset.es;
+  });
+  if(filtered.length) renderCard();
+}
+
+fetchCards();
 </script>
 </body>
 </html>
