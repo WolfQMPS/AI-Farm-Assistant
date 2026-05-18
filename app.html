@@ -508,11 +508,7 @@
 </head>
 <body>
 
-<!-- Config banner — remove once Airtable is connected -->
-<div class="config-banner">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-  Demo mode — sample cards shown. To connect Airtable, add your API key and base ID in the <code style="background:rgba(0,0,0,0.08);padding:1px 5px;border-radius:4px">CONFIG</code> section of the JS below.
-</div>
+
 
 <header>
   <div class="logo">
@@ -578,20 +574,39 @@
 </div>
 
 <script>
-const CONFIG = {
-  airtableApiKey: 'YOUR_AIRTABLE_API_KEY',
-  airtableBaseId: 'YOUR_BASE_ID',
-  airtableTableName: 'Lessons',
-};
+let SAMPLE_CARDS = [];
 
-const SAMPLE_CARDS = [
-  { id:1, title:'Teat cleaning before milking', titleEs:'Limpieza de pezones antes del ordeño', category:'Hygiene', annotation:'Always clean each teat with a single-use cloth before attaching the cluster. Work from the tip downward. This removes bacteria and stimulates milk let-down. Do not reuse cloths between cows.', annotationEs:'Siempre limpie cada pezón con un paño de un solo uso antes de conectar el grupo. Trabaje desde la punta hacia abajo. Esto elimina bacterias y estimula la bajada de leche. No reutilice los paños entre vacas.', educator:'T. Nkosi', date:'12 May 2026', hasAudio:true, imageUrl:null },
-  { id:2, title:'Checking liner condition', titleEs:'Verificar condición de las pezoneras', category:'Equipment', annotation:'Liners must be replaced every 2500 milkings or 3 months — whichever comes first. A cracked or stretched liner reduces vacuum and increases mastitis risk. Hold the liner up to the light to check for cracks.', annotationEs:'Las pezoneras deben reemplazarse cada 2500 ordeños o 3 meses, lo que ocurra primero. Una pezonera agrietada reduce el vacío y aumenta el riesgo de mastitis.', educator:'A. Joubert', date:'10 May 2026', hasAudio:true, imageUrl:null },
-  { id:3, title:'Forestripping — why it matters', titleEs:'Presellado — por qué importa', category:'Technique', annotation:'Strip 2–3 squirts from each quarter before attaching the cluster. This detects early mastitis signs (clots, watery milk) and stimulates oxytocin release. Check the strip cup carefully and record any abnormalities.', annotationEs:'Extraiga 2-3 chorros de cada cuarto antes de conectar el grupo. Esto detecta signos tempranos de mastitis y estimula la liberación de oxitocina.', educator:'T. Nkosi', date:'8 May 2026', hasAudio:false, imageUrl:null },
-  { id:4, title:'Teat dipping after milking', titleEs:'Sellado de pezones después del ordeño', category:'Hygiene', annotation:'Dip all four teats immediately after cluster removal — within 30 seconds. Use a post-dip cup filled to the correct level. Cover the full length of the teat. This seals the teat canal while it is still open.', annotationEs:'Selle los cuatro pezones inmediatamente después de retirar el grupo, dentro de los 30 segundos. Use una copa de sellado llena al nivel correcto. Cubra toda la longitud del pezón.', educator:'A. Joubert', date:'5 May 2026', hasAudio:true, imageUrl:null },
-  { id:5, title:'Identifying a swollen quarter', titleEs:'Identificar un cuarto inflamado', category:'Health', annotation:'Gently feel each quarter before milking. A hard, hot, or swollen quarter — especially with a reduced milk flow — is a mastitis indicator. Record the cow number and ear tag. Notify the herd manager immediately.', annotationEs:'Palpe suavemente cada cuarto antes del ordeño. Un cuarto duro, caliente o inflamado es un indicador de mastitis. Registre el número de vaca y notifique al encargado.', educator:'T. Nkosi', date:'3 May 2026', hasAudio:true, imageUrl:null },
-  { id:6, title:'Vacuum level checks', titleEs:'Verificación del nivel de vacío', category:'Equipment', annotation:'Check the vacuum gauge at the start of every milking session. Correct vacuum is between 42–48 kPa. If the reading is outside this range, do not start milking — call the maintenance team. Record the reading in the log.', annotationEs:'Verifique el vacuómetro al inicio de cada sesión. El vacío correcto es entre 42-48 kPa. Si está fuera de rango, no comience el ordeño y llame al equipo de mantenimiento.', educator:'A. Joubert', date:'1 May 2026', hasAudio:false, imageUrl:null },
-];
+async function fetchFromAirtable() {
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = `<div class="empty-state"><p style="color:var(--text-muted);font-size:14px">Loading cards...</p></div>`;
+  try {
+    const url = `https://api.airtable.com/v0/apppxuXZog3mlbrli/${encodeURIComponent('Lessons')}?sort[0][field]=Date+submitted&sort[0][direction]=desc`;
+    const res = await fetch(url, { headers: { Authorization: `Bearer patECg2gZL4t7qA9s.4e6c05ef2848c4d9797d6c94faf64dc98b43de6b43995fbbc8ac6038616e7468` } });
+    if (!res.ok) throw new Error('Airtable error (' + res.status + ')');
+    const data = await res.json();
+    SAMPLE_CARDS = data.records.map((rec) => {
+      const f = rec.fields;
+      const imageAttachments = f['Image'] || [];
+      const audioAttachments = f['Audio'] || [];
+      return {
+        id: rec.id,
+        title: f['Lesson title'] || 'Untitled',
+        titleEs: f['Lesson title'] || 'Sin título',
+        category: f['Category'] || 'General',
+        annotation: f['Annotation'] || '',
+        annotationEs: f['Annotation'] || '',
+        educator: f['Educator'] || 'Unknown',
+        date: f['Date submitted'] ? new Date(f['Date submitted']).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : '',
+        hasAudio: audioAttachments.length > 0,
+        audioUrl: audioAttachments.length > 0 ? audioAttachments[0].url : null,
+        imageUrl: imageAttachments.length > 0 ? imageAttachments[0].url : null,
+      };
+    });
+    renderCards();
+  } catch (err) {
+    grid.innerHTML = `<div class="empty-state"><h3>Could not load cards</h3><p style="font-size:13px;margin-top:6px">${err.message}</p></div>`;
+  }
+}
 
 let currentLang = 'en';
 let currentFilter = 'All';
@@ -632,10 +647,10 @@ function renderCards() {
     const catLabel = getCatLabel(card.category);
     const initials = card.educator.split(' ').map(w => w[0]).join('');
     return `
-    <div class="card" style="animation-delay:${i*0.06}s" onclick="openModal(${card.id})">
-      <div class="card-image-placeholder">
-        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
-      </div>
+    <div class="card" style="animation-delay:${i*0.06}s" onclick="openModal('${card.id}')">
+      ${card.imageUrl
+        ? `<img class="card-image" src="${card.imageUrl}" alt="${title}">`
+        : `<div class="card-image-placeholder"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>`}
       <div class="card-body">
         <div class="card-meta">
           <span class="card-category">${catLabel}</span>
@@ -649,7 +664,7 @@ function renderCards() {
           <div class="educator-avatar">${initials}</div>
           ${card.educator}
         </div>
-        ${card.hasAudio ? `<button class="audio-btn" onclick="event.stopPropagation();openModal(${card.id})">
+        ${card.hasAudio ? `<button class="audio-btn" onclick="event.stopPropagation();openModal('${card.id}')">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
           ${currentLang==='en'?'Listen':'Escuchar'}
         </button>` : ''}
@@ -681,11 +696,24 @@ function openModal(id) {
   document.getElementById('modalEducator').innerHTML = `<span style="display:flex;align-items:center;gap:6px"><span class="educator-avatar" style="width:22px;height:22px;border-radius:50%;background:#fdf0d5;color:#e9a84c;font-size:10px;font-weight:600;display:inline-flex;align-items:center;justify-content:center">${initials}</span>${card.educator}</span>`;
   document.getElementById('modalCardCount').textContent = `${currentLang==='en'?'Card':'Tarjeta'} ${idx} ${currentLang==='en'?'of':'de'} ${SAMPLE_CARDS.length}`;
 
-  document.getElementById('modalImageWrap').innerHTML = `<div class="modal-image-placeholder"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>`;
+  document.getElementById('modalImageWrap').innerHTML = card.imageUrl
+    ? `<img class="modal-image" src="${card.imageUrl}" alt="${title}">`
+    : `<div class="modal-image-placeholder"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>`;
 
   const audioSection = document.getElementById('modalAudio');
   audioSection.style.display = card.hasAudio ? 'flex' : 'none';
   document.getElementById('audioLabel').textContent = currentLang === 'en' ? 'Audio explanation' : 'Explicación de audio';
+
+  if (card.audioUrl) {
+    window._currentAudio = new Audio(card.audioUrl);
+    window._currentAudio.ontimeupdate = () => {
+      const pct = (window._currentAudio.currentTime / window._currentAudio.duration) * 100;
+      document.getElementById('audioProgress').style.width = Math.min(pct||0, 100) + '%';
+    };
+    window._currentAudio.onended = stopAudio;
+  } else {
+    window._currentAudio = null;
+  }
 
   document.getElementById('modalBackdrop').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -704,31 +732,35 @@ function closeModalDirect() {
 function toggleModalAudio() {
   if (audioPlaying) { stopAudio(); return; }
   audioPlaying = true;
-  audioProgress = 0;
   document.getElementById('modalPlayBtn').classList.add('playing');
   document.getElementById('modalPlayIcon').innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-  const duration = 30;
-  const interval = 100;
-  audioTimer = setInterval(() => {
-    audioProgress += (interval / (duration * 1000)) * 100;
-    document.getElementById('audioProgress').style.width = Math.min(audioProgress, 100) + '%';
-    if (audioProgress >= 100) stopAudio();
-  }, interval);
+  if (window._currentAudio) {
+    window._currentAudio.play();
+  } else {
+    const duration = 30000;
+    const interval = 100;
+    let elapsed = 0;
+    audioTimer = setInterval(() => {
+      elapsed += interval;
+      document.getElementById('audioProgress').style.width = Math.min((elapsed/duration)*100, 100) + '%';
+      if (elapsed >= duration) stopAudio();
+    }, interval);
+  }
 }
 
 function stopAudio() {
   audioPlaying = false;
   clearInterval(audioTimer);
-  audioProgress = 0;
+  if (window._currentAudio) { window._currentAudio.pause(); window._currentAudio.currentTime = 0; }
   const btn = document.getElementById('modalPlayBtn');
   const icon = document.getElementById('modalPlayIcon');
-  if (btn) { btn.classList.remove('playing'); }
-  if (icon) { icon.innerHTML = '<path d="M8 5v14l11-7z"/>'; }
+  if (btn) btn.classList.remove('playing');
+  if (icon) icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
   const bar = document.getElementById('audioProgress');
   if (bar) bar.style.width = '0%';
 }
 
-renderCards();
+fetchFromAirtable();
 </script>
 </body>
 </html>
