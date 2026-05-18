@@ -9,23 +9,27 @@ exports.handler = async (event) => {
     const challenge = params['hub.challenge'];
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-      return {
-        statusCode: 200,
-        body: challenge,
-      };
+      return { statusCode: 200, body: challenge };
     }
     return { statusCode: 403, body: 'Forbidden' };
   }
 
   if (event.httpMethod === 'POST') {
     try {
-      await fetch(MAKE_WEBHOOK_URL, {
+      const makeRes = await fetch(MAKE_WEBHOOK_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: event.body,
       });
+      const makeBody = await makeRes.text();
+      console.log('Make response status:', makeRes.status);
+      console.log('Make response body:', makeBody);
+
+      if (!makeRes.ok) {
+        console.error('Make rejected the request:', makeRes.status, makeBody);
+      }
     } catch (e) {
-      console.error('Forward to Make failed:', e);
+      console.error('Forward to Make failed:', e.message);
     }
     return { statusCode: 200, body: 'OK' };
   }
