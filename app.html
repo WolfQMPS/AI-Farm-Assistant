@@ -485,11 +485,14 @@ async function fetchCards(){
       const audsES=f['Audio (Spanish)']||[];
       const rawCat=(f['Category']||'General').trim();
       const normCat=rawCat.charAt(0).toUpperCase()+rawCat.slice(1).toLowerCase();
+      // Airtable long text fields with rich text enabled return an object {text, ...}
+      // Handle both plain string and rich text object formats
+      const getText=v=>typeof v==='string'?v:(v&&v.text?v.text:(v?String(v):''));
       return{
         id:rec.id,
         category:normCat,
-        annotationEN:f['Annotation']||'',
-        annotationES:f['Annotation (Spanish)']||'',
+        annotationEN:getText(f['Annotation']),
+        annotationES:getText(f['Annotation (Spanish)']),
         educator:f['Educator']||'',
         imageUrl:imgs.length?imgs[0].url:null,
         audioUrlEN:audsEN.length?audsEN[0].url:null,
