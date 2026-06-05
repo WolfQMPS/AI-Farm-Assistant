@@ -478,6 +478,10 @@ async function fetchCards(){
     });
     if(!res.ok) throw new Error('Airtable error '+res.status);
     const data=await res.json();
+    // DEBUG: log first record raw fields
+    if(data.records&&data.records[0]){
+      console.log('RAW fields:', JSON.stringify(data.records[0].fields,null,2));
+    }
     allCards=(data.records||[]).map(rec=>{
       const f=rec.fields||{};
       const imgs=f['Image']||[];
@@ -485,9 +489,13 @@ async function fetchCards(){
       const audsES=f['Audio (Spanish)']||[];
       const rawCat=(f['Category']||'General').trim();
       const normCat=rawCat.charAt(0).toUpperCase()+rawCat.slice(1).toLowerCase();
-      // Airtable long text fields with rich text enabled return an object {text, ...}
-      // Handle both plain string and rich text object formats
-      const getText=v=>typeof v==='string'?v:(v&&v.text?v.text:(v?String(v):''));
+      const getText=v=>{
+        if(!v) return '';
+        if(typeof v==='string') return v;
+        if(Array.isArray(v)) return v.map(i=>i.text||i.value||String(i)).join(' ');
+        if(typeof v==='object') return v.text||v.value||Object.values(v).join(' ');
+        return String(v);
+      };
       return{
         id:rec.id,
         category:normCat,
