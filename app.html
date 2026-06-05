@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Farm Learning / Aprendizaje de Granja</title>
+<title>Farm Learning — Milker Training Programme</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +30,7 @@
   --border:      rgba(139,46,26,0.12);
   --border-warm: rgba(139,46,26,0.25);
   --r:           18px;
-  --card-h:      440px;
+  --card-h:      480px;
 }
 
 body {
@@ -77,22 +77,6 @@ header {
 
 .counter-badge { font-size: 13px; color: var(--straw-light); }
 .counter-badge span { color: #fff; font-weight: 700; }
-
-.lang-toggle {
-  display: flex;
-  background: rgba(0,0,0,0.2);
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 8px; overflow: hidden;
-}
-
-.lang-btn {
-  padding: 5px 13px; font-size: 12px; font-weight: 700;
-  font-family: 'Lato', sans-serif; letter-spacing: 0.05em;
-  color: rgba(255,255,255,0.55); border: none; background: transparent;
-  cursor: pointer; transition: all 0.2s;
-}
-
-.lang-btn.active { background: var(--straw); color: var(--soil); }
 
 /* ── FILTERS ── */
 .filters {
@@ -191,8 +175,6 @@ header {
   backdrop-filter: blur(4px);
 }
 
-
-
 .cat-pill {
   font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; padding: 4px 12px; border-radius: 20px;
@@ -206,19 +188,34 @@ header {
   border: 2px solid var(--straw);
   transform: rotateY(180deg);
   display: flex; flex-direction: column;
-  padding: 1.75rem; gap: 1.25rem;
+  padding: 1.75rem; gap: 1rem;
   box-shadow: 0 4px 24px rgba(59,37,16,0.1), 0 1px 4px rgba(59,37,16,0.06);
 }
 
-.back-top {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; gap: 1rem;
+/* ── CARD LANGUAGE TOGGLE (back face only) ── */
+.card-lang-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-shrink: 0;
 }
 
-.back-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.1rem; font-weight: 700;
-  color: var(--soil); line-height: 1.3;
+.card-lang-toggle {
+  display: flex;
+  background: var(--cream-deep);
+  border: 1.5px solid var(--border-warm);
+  border-radius: 10px; overflow: hidden;
+  gap: 0;
+}
+
+.card-lang-btn {
+  padding: 5px 14px; font-size: 11px; font-weight: 700;
+  font-family: 'Lato', sans-serif; letter-spacing: 0.06em;
+  color: var(--text-muted); border: none; background: transparent;
+  cursor: pointer; transition: all 0.2s; text-transform: uppercase;
+}
+
+.card-lang-btn.active {
+  background: var(--barn); color: var(--milk);
+  border-radius: 8px;
 }
 
 .back-divider {
@@ -229,7 +226,10 @@ header {
 .back-annotation {
   font-size: 0.925rem; color: var(--soil-mid);
   line-height: 1.85; font-weight: 400; flex: 1; overflow-y: auto;
+  transition: opacity 0.2s ease;
 }
+
+.back-annotation.switching { opacity: 0; }
 
 /* Audio */
 .audio-player {
@@ -260,6 +260,12 @@ header {
 .audio-track { height: 3px; background: var(--cream-deep); border-radius: 2px; overflow: hidden; }
 .audio-fill { height: 100%; background: var(--barn); border-radius: 2px; width: 0%; transition: width 0.1s linear; }
 .audio-time { font-size: 11px; color: var(--text-muted); margin-top: 5px; font-variant-numeric: tabular-nums; }
+
+/* No Spanish available notice */
+.no-translation {
+  font-size: 12px; color: var(--text-muted); font-style: italic;
+  padding: 0.5rem 0;
+}
 
 .back-footer {
   display: flex; align-items: center; gap: 8px; flex-shrink: 0;
@@ -329,8 +335,8 @@ header {
 @media (max-width: 600px) {
   header { padding: 0.875rem 1rem; }
   .filters, .deck-stage { padding-left: 1rem; padding-right: 1rem; }
-  :root { --card-h: 400px; }
-  .card-back { padding: 1.25rem; gap: 1rem; }
+  :root { --card-h: 460px; }
+  .card-back { padding: 1.25rem; gap: 0.875rem; }
   .back-annotation { font-size: 0.875rem; }
   .logo-text small { display: none; }
 }
@@ -345,25 +351,21 @@ header {
     </div>
     <div class="logo-text">
       Farm Learning
-      <small data-en="Milker Training Programme" data-es="Capacitación de Ordeñadores">Milker Training Programme</small>
+      <small>Milker Training Programme</small>
     </div>
   </div>
   <div class="header-right">
     <span class="counter-badge" id="counterBadge"></span>
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" onclick="setLang('es')">ES</button>
-    </div>
   </div>
 </header>
 
 <div class="filters">
-  <span class="filter-label" data-en="Topic" data-es="Tema">Topic</span>
-  <button class="filter-pill active" onclick="filterCards('All',this)" data-en="All" data-es="Todo">All</button>
-  <button class="filter-pill" onclick="filterCards('Hygiene',this)" data-en="Hygiene" data-es="Higiene">Hygiene</button>
-  <button class="filter-pill" onclick="filterCards('Equipment',this)" data-en="Equipment" data-es="Equipo">Equipment</button>
-  <button class="filter-pill" onclick="filterCards('Technique',this)" data-en="Technique" data-es="Técnica">Technique</button>
-  <button class="filter-pill" onclick="filterCards('Health',this)" data-en="Health" data-es="Salud">Health</button>
+  <span class="filter-label">Topic</span>
+  <button class="filter-pill active" onclick="filterCards('All',this)">All</button>
+  <button class="filter-pill" onclick="filterCards('Hygiene',this)">Hygiene</button>
+  <button class="filter-pill" onclick="filterCards('Equipment',this)">Equipment</button>
+  <button class="filter-pill" onclick="filterCards('Technique',this)">Technique</button>
+  <button class="filter-pill" onclick="filterCards('Health',this)">Health</button>
 </div>
 
 <div class="deck-stage">
@@ -371,7 +373,7 @@ header {
 
   <div class="hint">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
-    <span id="hintText" data-en="Tap the card to flip it" data-es="Toca la tarjeta para voltearla">Tap the card to flip it</span>
+    <span id="hintText">Tap the card to flip it</span>
   </div>
 
   <div class="flip-scene" id="flipScene" onclick="flipCard()">
@@ -381,13 +383,13 @@ header {
       <div class="card-face card-front">
         <div class="card-front-img" id="frontImg">
           <div class="no-img">
-            <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
-            <span id="noImgText">No image yet</span>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg>
+            <span>No image yet</span>
           </div>
         </div>
         <div class="flip-cue">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
-          <span data-en="Tap to flip" data-es="Voltear">Tap to flip</span>
+          Tap to flip
         </div>
         <div style="position:absolute;top:14px;left:14px">
           <span class="cat-pill" id="frontCat" style="backdrop-filter:blur(4px);background:rgba(253,244,220,0.92)"></span>
@@ -396,11 +398,22 @@ header {
 
       <!-- BACK -->
       <div class="card-face card-back">
-        <div class="back-top">
+
+        <!-- Top row: category pill + EN/ES toggle -->
+        <div class="card-lang-bar">
           <span class="cat-pill" id="backCat"></span>
+          <div class="card-lang-toggle" onclick="event.stopPropagation()">
+            <button class="card-lang-btn active" id="btnEN" onclick="setCardLang('en')">EN</button>
+            <button class="card-lang-btn" id="btnES" onclick="setCardLang('es')">ES</button>
+          </div>
         </div>
+
         <div class="back-divider"></div>
+
+        <!-- Annotation text — switches language -->
         <div class="back-annotation" id="backAnnotation"></div>
+
+        <!-- Audio player — switches audio source -->
         <div class="audio-player" id="audioPlayer">
           <button class="play-btn" id="playBtn" onclick="event.stopPropagation();toggleAudio()">
             <svg id="playIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -411,16 +424,17 @@ header {
             <div class="audio-time" id="audioTime">0:00</div>
           </div>
         </div>
+
         <div class="back-footer">
           <div class="edu-avatar" id="backAvatar"></div>
           <span class="back-educator" id="backEducator"></span>
           <span class="flip-back-cue" onclick="event.stopPropagation();unflip()">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V1L8 5l4 4V6c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/></svg>
-            <span data-en="Flip back" data-es="Voltear">Flip back</span>
+            Flip back
           </span>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 
@@ -438,13 +452,23 @@ header {
 </div>
 
 <script>
-let allCards=[], filtered=[], current=0, lang='en';
+let allCards=[], filtered=[], current=0, cardLang='en';
 let isFlipped=false, audioEl=null, audioPlaying=false;
 
 const CAT={
-  en:{Hygiene:'Hygiene',Equipment:'Equipment',Technique:'Technique',Health:'Health',General:'General'},
-  es:{Hygiene:'Higiene',Equipment:'Equipo',Technique:'Técnica',Health:'Salud',General:'General'}
+  Hygiene:'Hygiene', Equipment:'Equipment',
+  Technique:'Technique', Health:'Health', General:'General'
 };
+
+// ── Fetch from Airtable ──
+// Expected Airtable fields:
+//   "Annotation"            → English annotation text
+//   "Annotation (Spanish)"  → Spanish annotation text
+//   "Audio"                 → English audio attachment array
+//   "Audio (Spanish)"       → Spanish audio attachment array
+//   "Image"                 → image attachment array
+//   "Category"              → single select
+//   "Educator"              → text
 
 async function fetchCards(){
   showState('<h3>Loading cards...</h3>');
@@ -456,18 +480,20 @@ async function fetchCards(){
     const data=await res.json();
     allCards=(data.records||[]).map(rec=>{
       const f=rec.fields||{};
-      const imgs=f['Image']||[], auds=f['Audio']||[];
+      const imgs=f['Image']||[];
+      const audsEN=f['Audio']||[];
+      const audsES=f['Audio (Spanish)']||[];
       const rawCat=(f['Category']||'General').trim();
       const normCat=rawCat.charAt(0).toUpperCase()+rawCat.slice(1).toLowerCase();
       return{
         id:rec.id,
-        title:f['Lesson title']||'Untitled',
         category:normCat,
-        annotation:f['Annotation']||'',
+        annotationEN:f['Annotation']||'',
+        annotationES:f['Annotation (Spanish)']||'',
         educator:f['Educator']||'',
         imageUrl:imgs.length?imgs[0].url:null,
-        audioUrl:auds.length?auds[0].url:null,
-        hasAudio:auds.length>0,
+        audioUrlEN:audsEN.length?audsEN[0].url:null,
+        audioUrlES:audsES.length?audsES[0].url:null,
       };
     });
     filtered=[...allCards];
@@ -480,53 +506,43 @@ async function fetchCards(){
   }
 }
 
+// ── State helpers ──
 function showState(html){
   document.getElementById('stateMsg').innerHTML=html;
   document.getElementById('stateMsg').style.display='block';
   document.getElementById('flipScene').style.display='none';
   document.getElementById('cardNav').style.display='none';
 }
-
 function hideState(){
   document.getElementById('stateMsg').style.display='none';
   document.getElementById('flipScene').style.display='block';
   document.getElementById('cardNav').style.display='flex';
 }
 
+// ── Render current card ──
 function renderCard(){
   if(!filtered.length){
-    showState(`<h3>${lang==='en'?'No cards found':'Sin tarjetas'}</h3><p>${lang==='en'?'Try a different filter.':'Prueba otro filtro.'}</p>`);
+    showState('<h3>No cards found</h3><p>Try a different filter.</p>');
     return;
   }
   hideState(); stopAudio(); unflip();
   const card=filtered[current];
-  const catLabel=CAT[lang][card.category]||card.category;
+  const catLabel=CAT[card.category]||card.category;
   const initials=card.educator.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
 
+  // Front image
   const fi=document.getElementById('frontImg');
   fi.innerHTML=card.imageUrl
-    ?`<img src="${card.imageUrl}" alt="${card.title}" style="width:100%;height:100%;object-fit:cover;display:block">`
-    :`<div class="no-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg><span>${lang==='en'?'No image yet':'Sin imagen'}</span></div>`;
-
+    ?`<img src="${card.imageUrl}" alt="Training image" style="width:100%;height:100%;object-fit:cover;display:block">`
+    :`<div class="no-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg><span>No image yet</span></div>`;
 
   document.getElementById('frontCat').textContent=catLabel;
-
   document.getElementById('backCat').textContent=catLabel;
-  document.getElementById('backAnnotation').textContent=card.annotation||(lang==='en'?'No annotation added yet.':'Sin anotación todavía.');
   document.getElementById('backAvatar').textContent=initials;
   document.getElementById('backEducator').textContent=card.educator||'—';
-  document.getElementById('audioLabel').textContent=lang==='en'?'Audio explanation':'Explicación de audio';
-  document.getElementById('audioPlayer').style.display=card.hasAudio?'flex':'none';
 
-  audioEl=card.audioUrl?new Audio(card.audioUrl):null;
-  if(audioEl){
-    audioEl.ontimeupdate=()=>{
-      const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
-      document.getElementById('audioFill').style.width=pct+'%';
-      document.getElementById('audioTime').textContent=fmt(audioEl.currentTime);
-    };
-    audioEl.onended=stopAudio;
-  }
+  // Render annotation + audio for current cardLang
+  renderCardContent(card);
 
   const pct=filtered.length>1?(current/(filtered.length-1))*100:100;
   document.getElementById('progressFill').style.width=pct+'%';
@@ -535,20 +551,76 @@ function renderCard(){
   updateCounter(); updateDots();
 }
 
+// ── Render annotation + audio for a given language ──
+function renderCardContent(card){
+  card=card||filtered[current];
+  const isES=cardLang==='es';
+
+  const annotation=isES
+    ?(card.annotationES||'')
+    :(card.annotationEN||'');
+
+  const audioUrl=isES?card.audioUrlES:card.audioUrlEN;
+  const hasAudio=!!audioUrl;
+
+  const annotEl=document.getElementById('backAnnotation');
+
+  if(!annotation && isES){
+    annotEl.textContent='Spanish translation not yet available for this card.';
+    annotEl.style.fontStyle='italic';
+    annotEl.style.color='var(--text-muted)';
+  } else {
+    annotEl.textContent=annotation||'No annotation added yet.';
+    annotEl.style.fontStyle='';
+    annotEl.style.color='';
+  }
+
+  document.getElementById('audioPlayer').style.display=hasAudio?'flex':'none';
+  document.getElementById('audioLabel').textContent=isES?'Explicación de audio':'Audio explanation';
+
+  stopAudio();
+  audioEl=audioUrl?new Audio(audioUrl):null;
+  if(audioEl){
+    audioEl.ontimeupdate=()=>{
+      const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
+      document.getElementById('audioFill').style.width=pct+'%';
+      document.getElementById('audioTime').textContent=fmt(audioEl.currentTime);
+    };
+    audioEl.onended=stopAudio;
+  }
+}
+
+// ── Card language toggle (EN / ES) ──
+function setCardLang(l){
+  cardLang=l;
+  document.getElementById('btnEN').classList.toggle('active',l==='en');
+  document.getElementById('btnES').classList.toggle('active',l==='es');
+
+  // Fade transition on annotation
+  const annotEl=document.getElementById('backAnnotation');
+  annotEl.classList.add('switching');
+  setTimeout(()=>{
+    renderCardContent();
+    annotEl.classList.remove('switching');
+  },180);
+}
+
+// ── Flip ──
 function flipCard(){
   isFlipped=!isFlipped;
   document.getElementById('flipScene').classList.toggle('flipped',isFlipped);
   document.getElementById('hintText').textContent=isFlipped
-    ?(lang==='en'?'Tap to flip back':'Toca para voltear')
-    :(lang==='en'?'Tap the card to flip it':'Toca la tarjeta para voltearla');
+    ?'Tap to flip back'
+    :'Tap the card to flip it';
 }
 
 function unflip(){
   isFlipped=false;
   document.getElementById('flipScene').classList.remove('flipped');
-  document.getElementById('hintText').textContent=lang==='en'?'Tap the card to flip it':'Toca la tarjeta para voltearla';
+  document.getElementById('hintText').textContent='Tap the card to flip it';
 }
 
+// ── Navigation ──
 function navigate(dir){
   const n=current+dir;
   if(n<0||n>=filtered.length) return;
@@ -581,6 +653,7 @@ function updateCounter(){
   el.innerHTML=filtered.length?`<span>${current+1}</span> / ${filtered.length}`:'';
 }
 
+// ── Filters ──
 function filterCards(cat,btn){
   document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
   btn.classList.add('active');
@@ -588,6 +661,7 @@ function filterCards(cat,btn){
   current=0; renderCard(); renderDots();
 }
 
+// ── Audio ──
 function toggleAudio(){
   if(!audioEl) return;
   if(audioPlaying){stopAudio();return;}
@@ -611,16 +685,6 @@ function stopAudio(){
 }
 
 function fmt(s){return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0');}
-
-function setLang(l){
-  lang=l;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelector(`.lang-btn:${l==='en'?'first':'last'}-child`).classList.add('active');
-  document.querySelectorAll('[data-en]').forEach(el=>{
-    el.textContent=l==='en'?el.dataset.en:el.dataset.es;
-  });
-  if(filtered.length) renderCard();
-}
 
 fetchCards();
 </script>
