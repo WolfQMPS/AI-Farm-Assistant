@@ -30,7 +30,7 @@
   --border:      rgba(139,46,26,0.12);
   --border-warm: rgba(139,46,26,0.25);
   --r:           18px;
-  --card-h:      480px;
+  --card-h:      520px;
 }
 
 body {
@@ -231,6 +231,51 @@ header {
 
 .back-annotation.switching { opacity: 0; }
 
+
+/* ── VIDEO FRONT THUMBNAIL ── */
+.video-thumb {
+  width: 100%; height: 100%; position: relative; overflow: hidden;
+  background: var(--soil);
+}
+.video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-play-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(59,37,16,0.35);
+  transition: background 0.2s;
+}
+.video-play-overlay:hover { background: rgba(59,37,16,0.5); }
+.video-play-circle {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: rgba(253,244,220,0.92); border: 2px solid var(--straw);
+  display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(4px);
+}
+.video-play-circle svg { width: 24px; height: 24px; fill: var(--barn); margin-left: 3px; }
+
+/* Video badge on front */
+.video-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(59,37,16,0.75); color: var(--straw-light);
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 4px 10px; border-radius: 20px;
+  display: flex; align-items: center; gap: 5px;
+  backdrop-filter: blur(4px);
+}
+.video-badge svg { width: 10px; height: 10px; fill: var(--straw-light); }
+
+/* ── VIDEO PLAYER (back face) ── */
+.back-video-wrap {
+  position: relative; border-radius: 12px; overflow: hidden;
+  background: var(--soil); flex-shrink: 0;
+  border: 1.5px solid var(--straw-light);
+  max-height: 200px;
+}
+.back-video-wrap video {
+  width: 100%; max-height: 200px; display: block;
+  object-fit: cover;
+}
+
 /* Audio */
 .audio-player {
   background: var(--cream); border: 1.5px solid var(--cream-deep);
@@ -410,6 +455,9 @@ header {
 
         <div class="back-divider"></div>
 
+        <!-- Video player (video cards only) -->
+        <div class="back-video-wrap" id="backVideoWrap" style="display:none"></div>
+
         <!-- Annotation text — switches language -->
         <div class="back-annotation" id="backAnnotation"></div>
 
@@ -467,6 +515,8 @@ const CAT={
 //   "Audio"                 → English audio attachment array
 //   "Audio (Spanish)"       → Spanish audio attachment array
 //   "Image"                 → image attachment array
+//   "Video"                 → video attachment array
+//   "Video Thumbnail"       → Cloudinary thumbnail URL (text)
 //   "Category"              → single select
 //   "Educator"              → text
 
@@ -478,10 +528,6 @@ async function fetchCards(){
     });
     if(!res.ok) throw new Error('Airtable error '+res.status);
     const data=await res.json();
-    // DEBUG: log first record raw fields
-    if(data.records&&data.records[0]){
-      console.log('RAW fields:', JSON.stringify(data.records[0].fields,null,2));
-    }
     allCards=(data.records||[]).map(rec=>{
       const f=rec.fields||{};
       const imgs=f['Image']||[];
@@ -503,6 +549,8 @@ async function fetchCards(){
         annotationES:getText(f['Annotation (Spanish)']),
         educator:f['Educator']||'',
         imageUrl:imgs.length?imgs[0].url:null,
+        videoUrl:(f['Video']||[]).length?(f['Video'])[0].url:null,
+        videoThumb:f['Video Thumbnail']||null,
         audioUrlEN:audsEN.length?audsEN[0].url:null,
         audioUrlES:audsES.length?audsES[0].url:null,
       };
@@ -536,16 +584,32 @@ function renderCard(){
     showState('<h3>No cards found</h3><p>Try a different filter.</p>');
     return;
   }
-  hideState(); stopAudio(); unflip();
+  hideState(); stopAudio(); stopVideo(); unflip();
   const card=filtered[current];
   const catLabel=CAT[card.category]||card.category;
   const initials=card.educator.split(' ').filter(Boolean).map(w=>w[0]).join('').toUpperCase().slice(0,2)||'?';
 
-  // Front image
+  // Front face — image or video thumbnail
   const fi=document.getElementById('frontImg');
-  fi.innerHTML=card.imageUrl
-    ?`<img src="${card.imageUrl}" alt="Training image" style="width:100%;height:100%;object-fit:cover;display:block">`
-    :`<div class="no-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg><span>No image yet</span></div>`;
+  if(card.videoUrl){
+    const thumb=card.videoThumb||'';
+    fi.innerHTML=`<div class="video-thumb">
+      ${thumb?`<img src="${thumb}" alt="Video thumbnail">`:''}
+      <div class="video-play-overlay">
+        <div class="video-play-circle">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="video-badge">
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      Video
+    </div>`;
+  } else if(card.imageUrl){
+    fi.innerHTML=`<img src="${card.imageUrl}" alt="Training image" style="width:100%;height:100%;object-fit:cover;display:block">`;
+  } else {
+    fi.innerHTML=`<div class="no-img"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3 3.5-4.5 4.5 6H5l3.5-4.5z"/></svg><span>No image yet</span></div>`;
+  }
 
   document.getElementById('frontCat').textContent=catLabel;
   document.getElementById('backCat').textContent=catLabel;
@@ -562,20 +626,16 @@ function renderCard(){
   updateCounter(); updateDots();
 }
 
-// ── Render annotation + audio for a given language ──
+// ── Render annotation + audio/video for a given language ──
 function renderCardContent(card){
   card=card||filtered[current];
   const isES=cardLang==='es';
 
-  const annotation=isES
-    ?(card.annotationES||'')
-    :(card.annotationEN||'');
-
+  const annotation=isES?(card.annotationES||''):(card.annotationEN||'');
   const audioUrl=isES?card.audioUrlES:card.audioUrlEN;
   const hasAudio=!!audioUrl;
 
   const annotEl=document.getElementById('backAnnotation');
-
   if(!annotation && isES){
     annotEl.textContent='Spanish translation not yet available for this card.';
     annotEl.style.fontStyle='italic';
@@ -586,11 +646,34 @@ function renderCardContent(card){
     annotEl.style.color='';
   }
 
-  document.getElementById('audioPlayer').style.display=hasAudio?'flex':'none';
-  document.getElementById('audioLabel').textContent=isES?'Explicación de audio':'Audio explanation';
+  // ── Video on back face ──
+  const videoWrap=document.getElementById('backVideoWrap');
+  if(card.videoUrl){
+    videoWrap.style.display='block';
+    // Pause any existing video before replacing
+    const oldVid=videoWrap.querySelector('video');
+    if(oldVid){ oldVid.pause(); }
+    videoWrap.innerHTML=`<video controls playsinline preload="metadata"
+      style="width:100%;max-height:200px;display:block;object-fit:cover">
+      <source src="${card.videoUrl}">
+    </video>`;
+  } else {
+    videoWrap.style.display='none';
+    videoWrap.innerHTML='';
+  }
+
+  // ── Audio (voiceover / standalone) ──
+  // For video cards: audio is a Spanish voiceover — show when ES
+  // For image cards: show audio when available in either language
+  const showAudio = card.videoUrl ? (isES && hasAudio) : hasAudio;
+  document.getElementById('audioPlayer').style.display=showAudio?'flex':'none';
+  document.getElementById('audioLabel').textContent=
+    card.videoUrl
+      ?(isES?'Narración en español':'')
+      :(isES?'Explicación de audio':'Audio explanation');
 
   stopAudio();
-  audioEl=audioUrl?new Audio(audioUrl):null;
+  audioEl=(showAudio&&audioUrl)?new Audio(audioUrl):null;
   if(audioEl){
     audioEl.ontimeupdate=()=>{
       const pct=audioEl.duration?(audioEl.currentTime/audioEl.duration)*100:0;
@@ -670,6 +753,14 @@ function filterCards(cat,btn){
   btn.classList.add('active');
   filtered=cat==='All'?[...allCards]:allCards.filter(c=>c.category.toLowerCase()===cat.toLowerCase());
   current=0; renderCard(); renderDots();
+}
+
+// ── Video ──
+function stopVideo(){
+  const wrap=document.getElementById('backVideoWrap');
+  if(!wrap) return;
+  const vid=wrap.querySelector('video');
+  if(vid){ vid.pause(); vid.currentTime=0; }
 }
 
 // ── Audio ──
