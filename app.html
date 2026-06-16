@@ -663,14 +663,10 @@ function renderCardContent(card){
   }
 
   // ── Audio (voiceover / standalone) ──
-  // For video cards: audio is a Spanish voiceover — show when ES
-  // For image cards: show audio when available in either language
-  const showAudio = card.videoUrl ? (isES && hasAudio) : hasAudio;
+  // Show audio player whenever there is an audio URL for the current language
+  const showAudio = hasAudio;
   document.getElementById('audioPlayer').style.display=showAudio?'flex':'none';
-  document.getElementById('audioLabel').textContent=
-    card.videoUrl
-      ?(isES?'Narración en español':'')
-      :(isES?'Explicación de audio':'Audio explanation');
+  document.getElementById('audioLabel').textContent=isES?'Explicación de audio':'Audio explanation';
 
   stopAudio();
   audioEl=(showAudio&&audioUrl)?new Audio(audioUrl):null;
