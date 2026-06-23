@@ -82,7 +82,7 @@ header {
 /* ── MAIN LAYOUT ── */
 .layout {
   display: grid;
-  grid-template-columns: 1fr 120px;
+  grid-template-columns: 1fr 220px;
   gap: 1.25rem;
   max-width: 900px;
   margin: 1.25rem auto;
@@ -388,7 +388,14 @@ header {
 /* ── RIGHT: CATEGORY ICONS ── */
 .cat-col {
   display: flex; flex-direction: column; gap: 0.5rem;
-  padding-top: 3.5rem; /* align with card */
+  padding-top: 3.5rem;
+  width: 220px;
+}
+
+.cat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
 }
 
 .from-you-btn {
@@ -474,13 +481,12 @@ header {
   }
 
   .cat-col {
-    flex-direction: row; flex-wrap: wrap;
+    flex-direction: column;
     padding-top: 0; gap: 0.5rem;
-    order: -1;
+    order: -1; width: 100%;
   }
 
-  .cat-icon-btn { width: calc(14.28% - 4px); aspect-ratio: 1; }
-  .all-btn { width: calc(14.28% - 4px); }
+  .cat-grid { grid-template-columns: repeat(3, 1fr); }
   .from-you-btn { width: 100%; margin-bottom: 0; }
 
   :root { --card-h: 420px; }
@@ -610,35 +616,37 @@ header {
 
     <button class="all-btn" onclick="filterCards('All',this)">All</button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Milking',this)">
-      <span class="cat-icon-glyph">🐄</span>
-      <span class="cat-icon-label">Milking</span>
-    </button>
+    <div class="cat-grid">
+      <button class="cat-icon-btn" onclick="filterCards('Milking',this)">
+        <span class="cat-icon-glyph">🐄</span>
+        <span class="cat-icon-label">Milking</span>
+      </button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Feeding',this)">
-      <span class="cat-icon-glyph">🌾</span>
-      <span class="cat-icon-label">Feeding</span>
-    </button>
+      <button class="cat-icon-btn" onclick="filterCards('Feeding',this)">
+        <span class="cat-icon-glyph">🌾</span>
+        <span class="cat-icon-label">Feeding</span>
+      </button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Health',this)">
-      <span class="cat-icon-glyph">💊</span>
-      <span class="cat-icon-label">Health</span>
-    </button>
+      <button class="cat-icon-btn" onclick="filterCards('Health',this)">
+        <span class="cat-icon-glyph">💊</span>
+        <span class="cat-icon-label">Health</span>
+      </button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Calves',this)">
-      <span class="cat-icon-glyph">🐮</span>
-      <span class="cat-icon-label">Calves</span>
-    </button>
+      <button class="cat-icon-btn" onclick="filterCards('Calves',this)">
+        <span class="cat-icon-glyph">🐮</span>
+        <span class="cat-icon-label">Calves</span>
+      </button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Breeding',this)">
-      <span class="cat-icon-glyph">🧬</span>
-      <span class="cat-icon-label">Breeding</span>
-    </button>
+      <button class="cat-icon-btn" onclick="filterCards('Breeding',this)">
+        <span class="cat-icon-glyph">🧬</span>
+        <span class="cat-icon-label">Breeding</span>
+      </button>
 
-    <button class="cat-icon-btn" onclick="filterCards('Safety',this)">
-      <span class="cat-icon-glyph">⛑️</span>
-      <span class="cat-icon-label">Safety</span>
-    </button>
+      <button class="cat-icon-btn" onclick="filterCards('Safety',this)">
+        <span class="cat-icon-glyph">⛑️</span>
+        <span class="cat-icon-label">Safety</span>
+      </button>
+    </div>
   </div>
 
 </div>
